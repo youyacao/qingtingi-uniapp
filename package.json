@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "goeasy": "^2.4.7",
+    "nodemon": "^2.0.19",
+    "numeral": "^2.0.6"
+  }
+}
