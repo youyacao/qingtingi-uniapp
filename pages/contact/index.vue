@@ -47,7 +47,7 @@ export default {
 			groups: [],
 			menu: [
 				{ title: '新的朋友', url: '/pages/newFriend/index', icon: '/static/images/Avatar-1.png' },
-				{ title: '我的同事', url: '/pages/colleague/index', icon: '/static/images/Avatar-2.png' },
+				{ title: '我的同事', url: '/pages/myts/index', icon: '/static/images/Avatar-2.png' },
 				{ title: '手机联系人', url: '/pages/linkman/index', icon: '/static/images/Avatar-3.png' },
 			/* 	{ title: '公众号', url: '/pages/accounts/index', icon: '/static/images/Avatar-4.png' },
 				{ title: '群组', url: '/pages/group/index', icon: '/static/images/Avatar-3.png' },

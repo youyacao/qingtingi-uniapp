@@ -4,6 +4,10 @@ import App from './App'
 import Vue from 'vue'
 import GoEasy from './lib/goeasy-2.4.7.min';
 Vue.config.productionTip = false
+import api from '@/components/http/index.js'
+
+    // 全局挂载后使用
+Vue.prototype.$http = api
 App.mpType = 'app'
 const app = new Vue({
     ...App

@@ -1,11 +1,11 @@
 <template>
 	<view class="center">
 		<view class="logo" @click="goLogin" :hover-class="!login ? 'logo-hover' : ''">
-			<image class="logo-img" :src="login ? uerInfo.avatarUrl :avatarUrl"></image>
+			<image class="logo-img" :src="login ? userInfo.avatar :avatarUrl"></image>
 			<view class="logo-title">
-				<text class="uer-name">Hi，{{login ? uerInfo.name : '您未登录'}}</text>
+				<text class="uer-name">Hi，{{login ? userInfo.username : '您未登录'}}</text>
 				
-				<text class="go-login navigat-arrow" v-if="!login" @click="goInfo">&#xe65e;</text>
+				<!-- <text class="go-login navigat-arrow" v-if="!login" @click="goInfo">&#xe65e;</text> -->
 				
 			</view>
 		</view>
@@ -55,16 +55,23 @@
 			</navigator> -->
 			
 			
-			<navigator url="/pages/my/gongzhonghao/index"  hover-class="other-navigator-hover">
+			<navigator url="/pages/shebei/index"  hover-class="other-navigator-hover">
 			<view class="center-list-item border-bottom">
-				<text class="list-icon">&#xe639;</text>
+				<!-- <text class="list-icon">&#xe639;</text> -->
 				<text class="list-text">我的设备</text>
 				<text class="navigat-arrow">&#xe65e;</text>
 			</view>
 			</navigator>
-			<navigator url="/pages/my/gongzhonghao/index"  hover-class="other-navigator-hover">
+			<navigator url="/pages/my/erweima/index"  hover-class="other-navigator-hover">
 			<view class="center-list-item border-bottom">
-				<text class="list-icon">&#xe639;</text>
+				<!-- <text class="list-icon">&#xe639;</text> -->
+				<text class="list-text">我的二维码</text>
+				<text class="navigat-arrow">&#xe65e;</text>
+			</view>
+			</navigator>
+			<navigator url="/pages/black/index"  hover-class="other-navigator-hover">
+			<view class="center-list-item border-bottom">
+				<!-- <text class="list-icon">&#xe639;</text> -->
 				<text class="list-text">黑名单</text>
 				<text class="navigat-arrow">&#xe65e;</text>
 			</view>
@@ -76,7 +83,7 @@
 		<view class="center-list">
 			<navigator url="/pages/my/set/index"  hover-class="other-navigator-hover">
 			<view class="center-list-item">
-				<text class="list-icon">&#xe614;</text>
+				<!-- <text class="list-icon">&#xe614;</text> -->
 				<text class="list-text">设置</text>
 				<text class="navigat-arrow">&#xe65e;</text>
 			</view>
@@ -91,13 +98,29 @@
 			return {
 				login: false,
 				avatarUrl: "../../static/images/Avatar-1.png",
-				uerInfo: {}
+				userInfo: null
 			}
+		},
+		onShow() {
+			   // this.userInfo =uni.getStorageSync('token')?uni.getStorageSync('token'):null
+				 this.$http.post('/user',{}).then(re=>{
+					 if(re.code==200){
+						 this.login=true
+						 this.userInfo=re.data
+					 }else{
+						this.login=false 
+					 }
+				 })
+				
+				
+			
 		},
 		methods: {
 			goLogin() {
 				if (!this.login) {
-					console.log("点击前往登录")
+					uni.navigateTo({
+						url:'/pages/login/login'
+					})
 				}
 			},
 			goInfo(){

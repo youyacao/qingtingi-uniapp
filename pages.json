@@ -2,15 +2,27 @@
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
 			"path": "pages/message/index",
-			"style": {
-				"navigationBarTitleText": "消息",
-				"navigationBarBackgroundColor" : "#F3F4F7",
-				"navigationBarTextStyle" : "black",
-				"app-plus" : {
-					"titleNView" : true
-				}
+			"style" : {
+			    "navigationBarTitleText" : "消息",
+				"enablePullDownRefresh" : true,
+			    "app-plus" : {
+			        "bounce" : "none",
+			        "titleNView" : {
+			            
+			            "buttons" : [
+			                {
+			                    "background" : "rgba(255,255,255,0.2)",
+			                    "color" : "#5500ff",
+			                    "type" : "none",
+			                    "text" : "+" ,//小相机
+								"fontSize": "24px"
+			                }
+			            ]
+			        }
+			    }
 			}
 		},
+		
 		{
 			"path": "pages/contact/index",
 			"style": {
@@ -22,6 +34,131 @@
 				}
 			}
 		},
+		{
+		    "path" : "pages/newFriend/index",
+		    "style" : {
+		        "navigationBarTitleText" : "新的朋友",
+		    	"enablePullDownRefresh" : true,
+		        "app-plus" : {
+		            "bounce" : "none",
+		            "titleNView" : {
+		                
+		                "buttons" : [
+		                    {
+		                        "background" : "rgba(255,255,255,0.2)",
+		                        "color" : "#5500ff",
+		                        "type" : "none",
+		                        "text" : "添加朋友/群组" ,//小相机
+								"fontSize": "14px"
+		                    }
+		                ]
+		            }
+		        }
+		    }
+		},
+		{
+		    "path" : "pages/myts/index",
+		    "style" : {
+		        "navigationBarTitleText" : "我的同事",
+		    	"enablePullDownRefresh" : true,
+		        "app-plus" : {
+		            "bounce" : "none",
+		            "titleNView" : {
+		                
+		                "buttons" : [
+		                    {
+		                        "background" : "rgba(255,255,255,0.2)",
+		                        "color" : "#5500ff",
+		                        "type" : "none",
+		                        "text" : "新建公司" ,//小相机
+								"fontSize": "14px"
+		                    }
+		                ]
+		            }
+		        }
+		    }
+		},
+		{
+			"path": "pages/linkman/index",
+			"style": {
+				"navigationBarTitleText": "手机联系人",
+				"navigationBarBackgroundColor" : "#F3F4F7",
+				"navigationBarTextStyle" : "black"
+			}
+		},
+		{
+			"path": "pages/tag/index",
+			"style": {
+				"navigationBarTitleText": "标签",
+				"navigationBarBackgroundColor" : "#F3F4F7",
+				"navigationBarTextStyle" : "black"
+			}
+		},
+		{
+			"path": "pages/tag/add",
+			"style": {
+				"navigationBarTitleText": "新建标签",
+				"navigationBarBackgroundColor" : "#F3F4F7",
+				"navigationBarTextStyle" : "black",
+				"enablePullDownRefresh" : true,
+				"app-plus" : {
+				    "bounce" : "none",
+				    "titleNView" : {
+				        
+				        "buttons" : [
+				            {
+				                "background" : "rgba(255,255,255,0.2)",
+				                "color" : "#5500ff",
+				                "type" : "none",
+				                "text" : "添加好友" ,//小相机
+								"fontSize": "14px"
+				            }
+				        ]
+				    }
+				}
+			}
+		},
+		{
+			"path": "pages/tag/set",
+			"style": {
+				"navigationBarTitleText": "设置标签",
+				"navigationBarBackgroundColor" : "#F3F4F7",
+				"navigationBarTextStyle" : "black",
+				"enablePullDownRefresh" : true,
+				"app-plus" : {
+				    "bounce" : "none",
+				    "titleNView" : {
+				        
+				        "buttons" : [
+				            {
+				                "background" : "rgba(255,255,255,0.2)",
+				                "color" : "#5500ff",
+				                "type" : "none",
+				                "text" : "添加好友" ,//小相机
+								"fontSize": "14px"
+				            }
+				        ]
+				    }
+				}
+			}
+		},
+		{
+			"path": "pages/myts/add",
+			"style": {
+				"navigationBarTitleText": "新建公司",
+				"navigationBarBackgroundColor" : "#F3F4F7",
+				"navigationBarTextStyle" : "black"
+			}
+		},
+		{
+			"path": "pages/newFriend/add",
+			"style": {
+				"navigationBarTitleText": "添加朋友/群组",
+				"navigationBarBackgroundColor" : "#F3F4F7",
+				"navigationBarTextStyle" : "black"
+			}
+		},
+		
 		{
 			"path": "pages/find/index",
 			"style": {
@@ -47,23 +184,38 @@
 		        "app-plus" : {
 		            "bounce" : "none",
 		            "titleNView" : {
-		                "type" : "transparent",
-		                "buttons" : [
-		                    {
-		                        "background" : "rgba(255,255,255,0.2)",
-		                        "color" : "#696969",
-		                        "type" : "none",
-		                        "text" : "\ue608" //小相机
-		                    }
-		                ]
+		                "type" : "transparent"
+		                
 		            }
 		        }
 		    }
 		},
 		{
-			"path": "pages/login/index",
+			"path": "pages/login/login",
 			"style": {
 				"navigationBarTitleText": "登录",
+				"navigationBarBackgroundColor" : "#ffffff",
+				"navigationBarTextStyle":"white",
+				"app-plus" : {
+					"titleNView" : true
+				}	
+			}
+		},
+		{
+			"path": "pages/login/register",
+			"style": {
+				"navigationBarTitleText": "注册",
+				"navigationBarBackgroundColor" : "#ffffff",
+				"navigationBarTextStyle":"white",
+				"app-plus" : {
+					"titleNView" : true
+				}	
+			}
+		},
+		{
+			"path": "pages/login/forget",
+			"style": {
+				"navigationBarTitleText": "忘记密码",
 				"navigationBarBackgroundColor" : "#ffffff",
 				"navigationBarTextStyle":"white",
 				"app-plus" : {
@@ -98,6 +250,24 @@
 			"path": "pages/HM-search/HM-search",
 			"style": {
 				"navigationBarTitleText": "搜索",
+				"app-plus":{
+					"softinputNavBar": "none"
+				}
+			}
+		},
+		{
+			"path": "pages/shebei/index",
+			"style": {
+				"navigationBarTitleText": "我的设备",
+				"app-plus":{
+					"softinputNavBar": "none"
+				}
+			}
+		},
+		{
+			"path": "pages/black/index",
+			"style": {
+				"navigationBarTitleText": "黑名单",
 				"app-plus":{
 					"softinputNavBar": "none"
 				}
@@ -239,14 +409,14 @@
 				},
 				{
 					"pagePath": "pages/find/index",
-					"iconPath": "static/images/contacts.png",
-					"selectedIconPath": "static/images/contacts-active.png",
+					"iconPath": "static/images/find.png",
+					"selectedIconPath": "static/images/find-active.png",
 					"text": "发现"
 				},
 				{
 					"pagePath": "pages/baidu/index",
-					"iconPath": "static/images/contacts.png",
-					"selectedIconPath": "static/images/contacts-active.png",
+					"iconPath": "static/images/baidu.png",
+					"selectedIconPath": "static/images/baidu-active.png",
 					"text": "百度"
 				},
 				{
