@@ -14,7 +14,7 @@
 			                    "background" : "rgba(255,255,255,0.2)",
 			                    "color" : "#5500ff",
 			                    "type" : "none",
-			                    "text" : "+" ,//小相机
+			                    "text" : "+    " ,//小相机
 								"fontSize": "24px"
 			                }
 			            ]
@@ -48,8 +48,9 @@
 		                        "background" : "rgba(255,255,255,0.2)",
 		                        "color" : "#5500ff",
 		                        "type" : "none",
-		                        "text" : "添加朋友/群组" ,//小相机
-								"fontSize": "14px"
+		                        "text" : "添加朋友/群组    " ,//小相机
+								"fontSize": "14px",
+								"width": "auto"
 		                    }
 		                ]
 		            }
@@ -70,8 +71,12 @@
 		                        "background" : "rgba(255,255,255,0.2)",
 		                        "color" : "#5500ff",
 		                        "type" : "none",
-		                        "text" : "新建公司" ,//小相机
-								"fontSize": "14px"
+		                        "text" : "新建公司   " ,//小相机
+								"fontSize": "14px",
+								"marginRight":"20px",
+								"position":"right:20px",
+								"width": "auto"
+								
 		                    }
 		                ]
 		            }
@@ -80,10 +85,10 @@
 		},
 		{
 			"path": "pages/linkman/index",
-			"style": {
-				"navigationBarTitleText": "手机联系人",
-				"navigationBarBackgroundColor" : "#F3F4F7",
-				"navigationBarTextStyle" : "black"
+			"style" : {
+			    "navigationBarTitleText" : "手机联系人"
+				
+			    
 			}
 		},
 		{
@@ -100,22 +105,8 @@
 				"navigationBarTitleText": "新建标签",
 				"navigationBarBackgroundColor" : "#F3F4F7",
 				"navigationBarTextStyle" : "black",
-				"enablePullDownRefresh" : true,
-				"app-plus" : {
-				    "bounce" : "none",
-				    "titleNView" : {
-				        
-				        "buttons" : [
-				            {
-				                "background" : "rgba(255,255,255,0.2)",
-				                "color" : "#5500ff",
-				                "type" : "none",
-				                "text" : "添加好友" ,//小相机
-								"fontSize": "14px"
-				            }
-				        ]
-				    }
-				}
+				"enablePullDownRefresh" : true
+				
 			}
 		},
 		{
@@ -124,22 +115,8 @@
 				"navigationBarTitleText": "设置标签",
 				"navigationBarBackgroundColor" : "#F3F4F7",
 				"navigationBarTextStyle" : "black",
-				"enablePullDownRefresh" : true,
-				"app-plus" : {
-				    "bounce" : "none",
-				    "titleNView" : {
-				        
-				        "buttons" : [
-				            {
-				                "background" : "rgba(255,255,255,0.2)",
-				                "color" : "#5500ff",
-				                "type" : "none",
-				                "text" : "添加好友" ,//小相机
-								"fontSize": "14px"
-				            }
-				        ]
-				    }
-				}
+				"enablePullDownRefresh" : true
+				
 			}
 		},
 		{
@@ -243,6 +220,13 @@
 			"path": "pages/chat/groupChat/member",
 			"style": {
 				"navigationBarTitleText": "群成员",
+				"navigationBarBackgroundColor" : "#F3F4F7"
+			}			
+		},
+		{
+			"path": "pages/chat/groupChat/add",
+			"style": {
+				"navigationBarTitleText": "邀请成员",
 				"navigationBarBackgroundColor" : "#F3F4F7"
 			}			
 		},

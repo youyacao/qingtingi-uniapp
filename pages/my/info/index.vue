@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="ui-all">
-			<view class="avatar" @tap="avatarChoose">
+			<view class="avatar" @click="avatarChoose">
 				<view  class="imgAvatar">
 					<view class="iavatar" :style="'background: url('+avater+') no-repeat center/cover #eeeeee;'"></view>
 				</view>

@@ -36,10 +36,10 @@
 						</view>
 					</view>
 					<view class="keyword">
-						<view v-for="(keyword,index) in oldKeywordList" @tap="doSearch(keyword)" :key="index">{{keyword}}</view>
+						<view v-for="(keyword,index) in oldKeywordList" @tap="doSearch(keyword)" :key="index">{{keyword.keyword}}</view>
 					</view>
 				</view>
-				<view class="keyword-block">
+				<!-- <view class="keyword-block">
 					<view class="keyword-list-header">
 						<view>热门搜索</view>
 						<view>
@@ -52,7 +52,7 @@
 					<view class="hide-hot-tis" v-else>
 						<view>当前搜热门搜索已隐藏</view>
 					</view>
-				</view>
+				</view> -->
 			</scroll-view>
 		</view>
 	</view>
@@ -97,18 +97,27 @@
 			},
 			//加载历史搜索,自动读取本地Storage
 			loadOldKeyword() {
-				uni.getStorage({
+				
+				/* uni.getStorage({
 					key: 'OldKeys',
 					success: (res) => {
 						var OldKeys = JSON.parse(res.data);
 						this.oldKeywordList = OldKeys;
 					}
-				});
+				}); */
+				this.$http.post('/searchList').then(res=>{
+				
+					this.oldKeywordList=res.data
+				})
 			},
 			//加载热门搜索
 			loadHotKeyword() {
+				this.$http.post('/searchList').then(res=>{
+					
+					this.hotKeywordList=res.data
+				})
 				//定义热门搜索关键字，可以自己实现ajax请求数据再赋值
-				this.hotKeywordList = ['键盘', '鼠标', '显示器', '电脑主机', '蓝牙音箱', '笔记本电脑', '鼠标垫', 'USB', 'USB3.0'];
+				//this.hotKeywordList = ['键盘', '鼠标', '显示器', '电脑主机', '蓝牙音箱', '笔记本电脑', '鼠标垫', 'USB', 'USB3.0'];
 			}, 
 			//监听输入
 			inputChange(event) {
@@ -167,6 +176,11 @@
 						}
 					}
 				});
+				this.oldKeywordList.map(item=>{
+					this.$http.post('/searchDel',{ids:item.ids}).then(res=>{
+						
+					})
+				})
 			},
 			//热门搜索开关
 			hotToggle() {
@@ -222,6 +236,10 @@
 						this.oldKeywordList = OldKeys; //更新历史搜索
 					}
 				});
+				
+				this.$http.post('/searchAdd',{keyword:keyword}).then(res=>{
+					
+				})
 			}
 		}
 	}

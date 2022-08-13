@@ -12,32 +12,32 @@
 						{{renderMessageDate(message, index)}}
 					</view>
 					<view class="message-recalled" v-if="message.recalled">
-						<view v-if="message.senderId !== currentUser.uuid">{{message.senderData.name}}撤回了一条消息</view>
+						<view v-if="message.senderId != currentUser.id">{{message.senderData.name}}撤回了一条消息</view>
 						<view v-else class="message-recalled-self">
 							<view>你撤回了一条消息</view>
-							<span v-if="message.type === 'text' && Date.now()-message.timestamp< 60 * 1000 " @click="editRecalledMessage(message.payload.text)">重新编辑</span>
+							<span v-if="message.type == 'text' && Date.now()-message.timestamp< 60 * 1000 " @click="editRecalledMessage(message.payload.text)">重新编辑</span>
 						</view>
 					</view>
 					<view class = "message-item" v-else>
 						<view class="message-item-checkbox">
-							<checkbox v-show="messageSelector.visible && message.status !== 'sending'" :value="message.messageId" :checked="messageSelector.messages.includes(message)" />
+							<checkbox v-show="messageSelector.visible && message.status != 'sending'" :value="message.messageId" :checked="messageSelector.messages.includes(message)" />
 						</view>
-						<view class="message-item-content" :class="{'self' : message.senderId ===  currentUser.uuid}">
+						<view class="message-item-content" :class="{'self' : message.senderId ==  currentUser.id}">
 							<view class="avatar">
 								<image :src="message.senderData.avatar"></image>
 							</view>
 							<view @longpress="showActionPopup(message,index)" class="content">
 								<view class="message-payload">
-									<b class="pending" v-if="message.status === 'sending'"></b>
-									<b class="send-fail" v-if="message.status === 'fail'"></b>
-									<view v-if="message.type === 'text'" v-html="renderTextMessage(message)"></view>
-									<image class="image-content" v-if="message.type === 'image'" :src="message.payload.url" :data-url="message.payload.url" @click="showImageFullScreen" mode="widthFix"></image>
-									<view class="video-snapshot"  v-if="message.type === 'video'" :data-url="message.payload.video.url" @click="playVideo">
+									<b class="pending" v-if="message.status == 'sending'"></b>
+									<b class="send-fail" v-if="message.status == 'fail'"></b>
+									<view v-if="message.type == 'text'" v-html="renderTextMessage(message)"></view>
+									<image class="image-content" v-if="message.type == 'image'" :src="message.payload.url" :data-url="message.payload.url" @click="showImageFullScreen" mode="widthFix"></image>
+									<view class="video-snapshot"  v-if="message.type == 'video'" :data-url="message.payload.video.url" @click="playVideo">
 										<image :src="message.payload.thumbnail.url" mode="aspectFit"></image>
 										<view class="video-play-icon"></view>
 									</view>
-									<GoEasyAudioPlayer v-if="message.type ==='audio'" :src="message.payload.url" :duration="message.payload.duration" />
-									<view class="custom-message" v-if="message.type === 'order'">
+									<GoEasyAudioPlayer v-if="message.type =='audio'" :src="message.payload.url" :duration="message.payload.duration" />
+									<view class="custom-message" v-if="message.type == 'order'">
 										<view class="title">
 											<image src="../../../static/images/order.png"></image>
 											<text>自定义消息</text>
@@ -126,6 +126,9 @@
 				'[傲慢]': 'emoji_8@2x.png'
 			};
 			return {
+				userInfo:null,
+				groups:null,
+				id:null,
 				//聊天文本框
 				content: '',
 				group:null,
@@ -175,27 +178,43 @@
 		},
 		onReady(){
 			this.videoPlayer.context = uni.createVideoContext('videoPlayer',this);
-			uni.setNavigationBarTitle({
-				title : this.group.name + '（' + Object.keys(this.groupMembers).length + '）'
-			});
+			
 		},
 		onShow () {
+			
 			this.otherTypesMessagePanelVisible = false;
 			this.emoji.visible = false;
 		},
 		onLoad(options) {
 			//聊天对象
 			let groupId = options.to;
-			this.currentUser = uni.getStorageSync('currentUser');
+			this.id= options.to;
+			this.userInfo =uni.getStorageSync('userInfo')?uni.getStorageSync('userInfo'):{}
+			
+			this.$http.post('/groupList',{page:1, limit:10000,user_id:this.userInfo.id}).then(res=>{
+			res.data.list.map(gr=>{
+					if( gr.id==options.to){
+					this.groups= gr
+					this.group=gr
+					uni.setNavigationBarTitle({
+						title : this.group.name + '（' + this.group.join_num+ '）'
+					});
+					this.loadHistoryMessage(true);
+					}
+				})
+				console.log(this.groups)
+			})
+			
+			this.currentUser = uni.getStorageSync('userInfo');
 			//从服务器获取最新的群信息
-			this.group = restApi.findGroupById(groupId);
-			this.groupMembers = restApi.findGroupMembers(groupId);
+			//this.group = restApi.findGroupById(groupId);
+			//this.groupMembers = restApi.findGroupMembers(groupId);
 
 			this.initialGoEasyListeners();
-			this.loadHistoryMessage(true);
+			
 			// 录音监听器
 			this.initRecorderListeners();
-
+             
 		},
 		onPullDownRefresh(e) {
 			this.loadHistoryMessage(false);
@@ -227,7 +246,7 @@
 				//监听群聊消息
 				this.goEasy.im.on(this.GoEasy.IM_EVENT.GROUP_MESSAGE_RECEIVED, (message) => {
 					let groupId = message.groupId;
-					if (groupId === this.group.uuid) {
+					if (groupId === this.group.id) {
 						this.messages.push(message);
 						//聊天时，收到消息标记为已读
 						this.markGroupMessageAsRead(groupId);
@@ -239,7 +258,7 @@
 				this.goEasy.im.on(this.GoEasy.IM_EVENT.MESSAGE_DELETED,(deletedMessages) => {
 					deletedMessages.forEach(message => {
 						let groupId = message.groupId;
-						if (groupId && groupId === this.group.uuid) {
+						if (groupId && groupId === this.group.id) {
 							let index = this.messages.indexOf(message);
 							if (index > -1) {
 								this.messages.splice(index, 1);
@@ -270,11 +289,11 @@
 					res.duration = duration;
 					let audioMessage = this.goEasy.im.createAudioMessage({
 						to : {
-							id : this.group.uuid,
+							id : this.group.id,
 							type : this.GoEasy.IM_SCENE.GROUP,
 							data : 	{
 								name : this.group.name,
-								avatar : this.group.avatar
+								avatar : this.group.group_avatar
 							}
 						},
 						file: res,
@@ -282,7 +301,7 @@
 							console.log(progress);
 						},
 						notification : {
-							title : this.currentUser.name + '发来一段语音',
+							title : this.currentUser.username + '发来一段语音',
 							body : '[语音消息]'		// 字段最长 50 字符
 						}
 					});
@@ -325,15 +344,15 @@
 					let textMessage = this.goEasy.im.createTextMessage({
 						text:this.content,
 						to : {
-							id : this.group.uuid,
+							id : this.group.id,
 							type : this.GoEasy.IM_SCENE.GROUP,
 							data : {
 								name : this.group.name,
-								avatar : this.group.avatar
+								avatar : this.group.group_avatar
 							}
 						},
 						notification : {
-							title : this.currentUser.name + '发来一段文字',
+							title : this.currentUser.username + '发来一段文字',
 							body : body // 字段最长 50 字符
 						}
 					});
@@ -346,11 +365,11 @@
 					success : (res) => {
 						let videoMessage = this.goEasy.im.createVideoMessage({
 							to : {
-								id : this.group.uuid,
+								id : this.group.id,
 								type : this.GoEasy.IM_SCENE.GROUP,
 								data : {
 									name : this.group.name,
-									avatar : this.group.avatar
+									avatar : this.group.group_avatar
 								}
 							},
 							file: res,
@@ -358,7 +377,7 @@
 								console.log(progress)
 							},
 							notification : {
-								title : this.currentUser.name + '发来一个视频',
+								title : this.currentUser.username + '发来一个视频',
 								body : '[视频消息]'		// 字段最长 50 字符
 							}
 						});
@@ -373,11 +392,11 @@
 						res.tempFiles.forEach(file => {
 							let imageMessage = this.goEasy.im.createImageMessage({
 								to : {
-									id : this.group.uuid,
+									id : this.group.id,
 									type : this.GoEasy.IM_SCENE.GROUP,
 									data : {
 										name : this.group.name,
-										avatar : this.group.avatar
+										avatar : this.group.group_avatar
 									}
 								},
 								file: file,
@@ -385,7 +404,7 @@
 									console.log(progress)
 								},
 								notification : {
-									title : this.currentUser.name + '发来一张图片',
+									title : this.currentUser.username + '发来一张图片',
 									body : '[图片消息]'		// 字段最长 50 字符
 								}
 							});
@@ -397,7 +416,7 @@
 			showActionPopup(message) {
 				const MAX_RECALLABLE_TIME = 3 * 60 * 1000; //3分钟以内的消息才可以撤回
 				this.messageSelector.messages = [message];
-				if ((Date.now() - message.timestamp) < MAX_RECALLABLE_TIME && message.senderId === this.currentUser.uuid && message.status === 'success') {
+				if ((Date.now() - message.timestamp) < MAX_RECALLABLE_TIME && message.senderId === this.currentUser.id && message.status === 'success') {
 					this.actionPopup.recallable = true;
 				} else {
 					this.actionPopup.recallable = false;
@@ -485,7 +504,7 @@
 					lastMessageTimeStamp = lastMessage.timestamp;
 				}
 				this.goEasy.im.history({
-					groupId: this.group.uuid,
+					groupId: this.group.id,
 					lastTimestamp: lastMessageTimeStamp,
 					limit: 10,
 					onSuccess: (result) => {
@@ -498,7 +517,7 @@
 							if (scrollToBottom) {
 								this.scrollToBottom();
 								//收到的消息设置为已读
-								this.markGroupMessageAsRead(this.group.uuid);
+								this.markGroupMessageAsRead(this.group.id);
 							}
 						}
 					},
@@ -511,7 +530,8 @@
 			},
 			showMembers () {//显示群成员
 				uni.navigateTo({
-					url : '../groupChat/member?users=' + JSON.stringify(this.groupMembers)
+					//url : '../groupChat/member?users=' + JSON.stringify(this.groupMembers)
+					url : '../groupChat/member?id=' +this.id+'&user_id='+this.groups.user_id
 				});
 			},
 			onRecordStart () {
@@ -593,15 +613,15 @@
 						price : data.price
 					},
 					to : {
-						id : this.group.uuid,
+						id : this.group.id,
 						type : this.GoEasy.IM_SCENE.GROUP,
 						data : {
 							name : this.group.name,
-							avatar: this.group.avatar
+							avatar: this.group.group_avatar
 						}
 					},
 					notification : {
-						title : this.currentUser.name + '发来一份订单',
+						title : this.currentUser.username + '发来一份订单',
 						body : '[订单消息]'     // 字段最长 50 字符
 					}
 				});

@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<search-box :searchPlaceholder="searchPlaceholder" @search="goSearch"></search-box>
-		<scroll-view class="conversations" scroll-y="true">
+		<scroll-view class="conversations" scroll-y="true" style="margin-bottom: 50px;">
 			<view v-if="conversations.length > 0">
 				<view class="scroll-item" v-for="(conversation, key) in conversations" :key="key">
 					<view class="item-head">
@@ -16,20 +16,20 @@
 						<view class="item-info-bottom">
 							<view class="item-info-bottom-item">
 								<view class="item-info-top_content" v-if="!conversation.lastMessage.recalled">
-									<text class="unread-text">{{conversation.lastMessage.read === false && conversation.lastMessage.senderId === currentUser.uuid?'[未读]':''}}</text>
-									<text v-if="conversation.type === 'private'">{{conversation.lastMessage.senderId === currentUser.uuid? '我': conversation.data.name}}:</text>
-									<text v-else>{{conversation.lastMessage.senderId === currentUser.uuid? '我': conversation.lastMessage.senderData.name}}:</text>
-									<text v-if="conversation.lastMessage.type === 'text'">{{conversation.lastMessage.payload.text}}</text>
-									<text v-else-if="conversation.lastMessage.type === 'video'">[视频消息]</text>
-									<text v-else-if="conversation.lastMessage.type === 'audio'">[语音消息]</text>
-									<text v-else-if="conversation.lastMessage.type === 'image'">[图片消息]</text>
-									<text v-else-if="conversation.lastMessage.type === 'file'">[文件消息]</text>
-									<text v-else-if="conversation.lastMessage.type === 'order'">[自定义消息:订单]</text>
+									<text class="unread-text">{{conversation.lastMessage.read === false && conversation.lastMessage.senderId == currentUser.id?'[未读]':''}}</text>
+									<text v-if="conversation.type == 'private'">{{conversation.lastMessage.senderId == currentUser.id? '我': conversation.data.name}}:</text>
+									<text v-else>{{conversation.lastMessage.senderId == currentUser.id? '我': conversation.lastMessage.senderData.name}}:</text>
+									<text v-if="conversation.lastMessage.type == 'text'">{{conversation.lastMessage.payload.text}}</text>
+									<text v-else-if="conversation.lastMessage.type == 'video'">[视频消息]</text>
+									<text v-else-if="conversation.lastMessage.type == 'audio'">[语音消息]</text>
+									<text v-else-if="conversation.lastMessage.type == 'image'">[图片消息]</text>
+									<text v-else-if="conversation.lastMessage.type == 'file'">[文件消息]</text>
+									<text v-else-if="conversation.lastMessage.type == 'order'">[自定义消息:订单]</text>
 									<text v-else>[[未识别内容]]</text>
 								</view>
 								<view class="item-info-top_content" v-else>
-									<text v-if="conversation.type === 'private'">{{conversation.lastMessage.senderId === currentUser.uuid? '你': `"${conversation.data.name}"`}}撤回了一条消息</text>
-									<text v-if="conversation.type === 'group'">{{conversation.lastMessage.senderId === currentUser.uuid? '你': `"${conversation.lastMessage.senderData.name}"`}}撤回了一条消息</text>
+									<text v-if="conversation.type == 'private'">{{conversation.lastMessage.senderId == currentUser.id? '你': `"${conversation.data.name}"`}}撤回了一条消息</text>
+									<text v-if="conversation.type == 'group'">{{conversation.lastMessage.senderId == currentUser.id? '你': `"${conversation.lastMessage.senderData.name}"`}}撤回了一条消息</text>
 								</view>
 								<view class="item-info-bottom_action" @click.stop="showAction(conversation)"></view>
 							</view>
@@ -56,7 +56,14 @@
 				<uni-popup ref="popup" background-color="#fff" @change="change">
 					<view class="popup-content" :class="{ 'popup-height': type === 'left' || type === 'right' }">
 						<view class="ui-all">
-							
+							<view class="avatar" @click="avatarChoose">
+								<view  class="imgAvatar">
+									<view class="iavatar" :style="'background: url('+avater+') no-repeat center/cover #eeeeee;'"></view>
+								</view>
+								
+								
+								
+							</view>
 							<view class="ui-list">
 								<text>群组名称</text>
 								<input type="text" placeholder="请输入群组名称" v-model="groupName"  placeholder-class="place" />
@@ -76,6 +83,7 @@
 </template>
 
 <script>
+	import { pathToBase64, base64ToPath } from '@/components/image-tools/index.js'
 	import chunLeiPopups from "@/components/chunLei-popups/chunLei-popups.vue";
 	import SearchBox from '@/components/searchBox/index';
 	import restApi from '../../lib/restapi';
@@ -84,6 +92,7 @@
 		components:{SearchBox,chunLeiPopups},
 		data () {
 			return {
+				avater:'',
 				groupDesc:'',
 				groupName:'',
 				type:'center',
@@ -113,10 +122,10 @@
 		  },
 		onShow () {
 			 
-			let currentUser = uni.getStorageSync('currentUser');
+			let currentUser = uni.getStorageSync('userInfo');
 			if(!currentUser){
 				uni.navigateTo({
-					url: '/pages/login/index'
+					url: '/pages/login/login'
 				})
 				return;
 			}
@@ -130,8 +139,76 @@
 			this.loadConversations(); //加载会话列表
 		},
 		methods : {
+			imgUpload(file) {
+				console.log(file)
+				this.$http.post('/upload',{file:file}).then(res=>{
+					this.avater=res.data.url
+				})
+			},
+			avatarChoose() {
+				let that = this;
+				uni.chooseImage({
+				  count: 1,
+				  type: 'image',
+				  success (res) {
+					/* uni.uploadFile({
+					    url:'https://stqingtingadmin.youyacao.com/api/v1/upload', 
+					    files: res.tempFiles[0],
+					    formData: {},
+					    header:{"Content-Type": "multipart/form-data"},
+					    success: (res) => {
+					        
+					    }
+					}) */
+					console.log(res)
+				    // tempFilePath可以作为img标签的src属性显示图片
+				    const tempFilePaths = res.tempFilePaths[0]
+					 
+					//that.imgUpload(tempFilePaths);
+					 pathToBase64(tempFilePaths)
+					  .then(base64 => {
+						
+							 that.imgUpload(base64);
+						
+					   
+					  }) 
+					  .catch(error => {
+					    console.error(error)
+					  }) 
+					 
+					        /*      var reader = new FileReader();
+					              //reader.readAsDataURL(res.tempFiles[0]);
+								  reader.readAsDataURL(res.tempFiles[0]);
+					              reader.onload = function(){
+					                  var binary = this.result;
+					                   that.imgUpload(binary);
+									 } */
+					  
+				  }
+				})
+				/* uni.chooseImage({
+					count: 1,
+					sizeType: ['original', 'compressed'],
+					sourceType: ['album', 'camera'],
+					success(res) {
+						console.log(res)
+						// tempFilePath可以作为img标签的src属性显示图片
+						that.imgUpload(res.tempFilePaths[0]);
+						const tempFilePaths = res.tempFilePaths;
+					}
+				}); */
+				
+				
+				
+			},
 			create(){
-				this.$refs.popup.close()
+				this.$http.get('/user/saveGroup',{ name:this.groupName,intro:this.groupDesc,group_avatar:this.avater}).then(res=>{
+					this.$refs.popup.close()
+					this.avater=''
+					this.groupName=''
+					this.groupDesc=''
+				})
+				
 			},
 			change(){},
 			tapPopup(e){
@@ -148,9 +225,9 @@
 				
 				uni.showLoading();
 				this.goEasy.connect({
-					id: this.currentUser.uuid,
+					id: this.currentUser.id,
 					data: {
-						name: this.currentUser.name,
+						name: this.currentUser.username,
 						avatar: this.currentUser.avatar
 					},
 					onSuccess: () => {
@@ -186,17 +263,20 @@
 				});
 			},
 			subscribeGroup() {
-				let groups = restApi.findGroups(this.currentUser);
-				let groupIds = groups.map(item => item.uuid);
-				this.goEasy.im.subscribeGroup({
-					groupIds: groupIds,
-					onSuccess: function () {
-						console.log('订阅群消息成功');
-					},
-					onFailed: function (error) {
-						console.log('订阅群消息失败:', error);
-					}
-				});
+				this.$http.post('/groupList',{page:1,limit:10000,user_id:this.currentUser.id}).then(res=>{
+					let groups = res.data.list;
+					let groupIds = groups.map(item => item.id);
+					this.goEasy.im.subscribeGroup({
+						groupIds: groupIds,
+						onSuccess: function () {
+							console.log('订阅群消息成功');
+						},
+						onFailed: function (error) {
+							console.log('订阅群消息失败:', error);
+						}
+					});
+				})
+				
 			},
 			topConversation() {  //会话置顶
 				uni.showLoading({

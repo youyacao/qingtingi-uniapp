@@ -86,6 +86,7 @@
 		components:{yuanqiqrcode},
 		data() {
 			return {
+				userInfo:null,
 				text: "https://uniapp.dcloud.net.cn",
 				size: 256,
 				logo: "/static/images/Avatar-1.png",
@@ -99,6 +100,12 @@
 				fileTypeList: ['png', 'jpg'],
 				correctLevelList: ["L(7%)", "M(15%)", "Q(25%)", "H(30%)"]
 			};
+		},
+		onShow(){
+			this.userInfo = uni.getStorageSync('userInfo');
+			console.log(this.userInfo)
+			this.logo=this.userInfo.avatar
+			this.text='https://uniapp.dcloud.net.cn?code='+this.userInfo.refcode
 		},
 		methods: {
 			test(){

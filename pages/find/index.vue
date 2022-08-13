@@ -16,13 +16,13 @@
 			</view>
 		</view> -->
 		<view class="cont">
-			<view class="title">热门公众号 <span class="tips"></span></view>
+			<view class="title">热门群聊 <span class="tips"></span></view>
 			<div class="contacts-container">
 				<div class="user-list">
-					<div class="user-list-item" v-for="(group, uuid) in groups" :key="uuid" @click="enterChat(group.uuid, 'group')">
-						<div class="user-item-avatar"><image :src="group.avatar" /></div>
+					<div class="user-list-item" v-for="(group, uuid) in groups" :key="uuid" >
+						<div class="user-item-avatar"><image :src="group.group_avatar" /></div>
 						<div class="user-item-info">
-							<span class="user-item-info__name">{{ group.name }}</span>
+							<span class="user-item-info__name">{{ group.name }}</span><span class='user-item-info__btn' @click="addGroup(group)">加入</span>
 						</div>
 					</div>
 				</div>
@@ -44,15 +44,24 @@ export default {
 		return {
 			friends: [],
 			groups: [],
-			
+			userInfo:null
 		};
 	},
 	onShow() {
-		let currentUser = uni.getStorageSync('currentUser');
-		this.friends = restApi.findFriends(currentUser);
-		this.groups = restApi.findGroups(currentUser);
+		this.userInfo =uni.getStorageSync('userInfo')
+		this.getGroupList()
 	},
 	methods: {
+		addGroup(e){
+			this.$http.post('/user/joinGroup',{group_id:e.id,user_id:this.userInfo.id}).then(res=>{
+				
+			})
+		},
+		getGroupList(){
+			this.$http.post('/groupList',{page:1, limit:10000}).then(res=>{
+				this.groups=res.data.list
+			})
+		},
 		goPyq(){
 			uni.navigateTo({
 				url:'/pages/my/pengyouquan/index'
@@ -74,6 +83,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+	.user-item-info__btn{
+		margin-right: 30rpx;
+		color: #0055ff;
+	}
 	.content {
 		display: flex;
 		flex-direction: column;

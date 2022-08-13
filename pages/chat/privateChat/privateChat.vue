@@ -12,32 +12,32 @@
 						{{renderMessageDate(message, index)}}
 					</view>
 					<view class="message-recalled" v-if="message.recalled">
-						<view v-if="message.senderId !== currentUser.uuid">{{friend.name}}撤回了一条消息</view>
+						<view v-if="message.senderId != currentUser.id">{{friend.username}}撤回了一条消息</view>
 						<view v-else class="message-recalled-self">
 							<view>你撤回了一条消息</view>
-							<span v-if="message.type === 'text' && Date.now()-message.timestamp< 60 * 1000 " @click="editRecalledMessage(message.payload.text)">重新编辑</span>
+							<span v-if="message.type == 'text' && Date.now()-message.timestamp< 60 * 1000 " @click="editRecalledMessage(message.payload.text)">重新编辑</span>
 						</view>
 					</view>
 					<view class="message-item" v-else>
 						<view class="message-item-checkbox">
-							<checkbox v-show="messageSelector.visible && message.status !== 'sending'" :value="message.messageId" :checked="messageSelector.messages.includes(message)" />
+							<checkbox v-show="messageSelector.visible && message.status != 'sending'" :value="message.messageId" :checked="messageSelector.messages.includes(message)" />
 						</view>
-						<view class="message-item-content" :class="{'self' : message.senderId ===  currentUser.uuid}">
+						<view class="message-item-content" :class="{'self' : message.senderId ==  currentUser.id}">
 							<view class="avatar">
-								<image :src="message.senderId === currentUser.uuid? currentUser.avatar : friend.avatar"></image>
+								<image :src="message.senderId == currentUser.id? currentUser.avatar : friend.avatar"></image>
 							</view>
 							<view class="content" @longpress="showActionPopup(message)">
 								<view class="message-payload">
-									<b class="pending" v-if="message.status === 'sending'"></b>
-									<b class="send-fail" v-if="message.status === 'fail'"></b>
-									<view v-if="message.type === 'text'" v-html="renderTextMessage(message)"></view>
-									<image class="image-content" v-if="message.type === 'image'" :src="message.payload.url" :data-url="message.payload.url" @click="showImageFullScreen" mode="widthFix"></image>
-									<view class="video-snapshot"  v-if="message.type === 'video'" :data-url="message.payload.video.url" @click="playVideo">
+									<b class="pending" v-if="message.status == 'sending'"></b>
+									<b class="send-fail" v-if="message.status == 'fail'"></b>
+									<view v-if="message.type == 'text'" v-html="renderTextMessage(message)"></view>
+									<image class="image-content" v-if="message.type == 'image'" :src="message.payload.url" :data-url="message.payload.url" @click="showImageFullScreen" mode="widthFix"></image>
+									<view class="video-snapshot"  v-if="message.type == 'video'" :data-url="message.payload.video.url" @click="playVideo">
 										<image :src="message.payload.thumbnail.url" mode="aspectFit"></image>
 										<view class="video-play-icon"></view>
 									</view>
-									<GoEasyAudioPlayer v-if="message.type ==='audio'" :src="message.payload.url" :duration="message.payload.duration" />
-									<view class="custom-message" v-if="message.type === 'order'">
+									<GoEasyAudioPlayer v-if="message.type =='audio'" :src="message.payload.url" :duration="message.payload.duration" />
+									<view class="custom-message" v-if="message.type == 'order'">
 										<view class="title">
 											<image src="../../../static/images/order.png"></image>
 											<text>自定义消息</text>
@@ -47,7 +47,7 @@
 										<view class="custom-message-item">金额: {{message.payload.price}}</view>
 									</view>
 								</view>
-								<view v-if="message.senderId === currentUser.uuid" :class="message.read ?'message-read':'message-unread'">
+								<view v-if="message.senderId == currentUser.id" :class="message.read ?'message-read':'message-unread'">
 									<view v-if="message.status === 'success'">{{message.read?'已读':'未读'}}</view>
 								</view>
 							</view>
@@ -179,9 +179,7 @@
 		onReady () {
 			this.videoPlayer.context = uni.createVideoContext('videoPlayer',this);
 			// https://uniapp.dcloud.io/api/ui/navigationbar?id=setnavigationbartitle
-			uni.setNavigationBarTitle({
-				title : this.friend.name
-			});
+			
 		},
 		onShow () {
 			this.otherTypesMessagePanelVisible = false;
@@ -190,12 +188,19 @@
 		onLoad(options) {
 			//聊天对象
 			let friendId = options.to;
-			this.currentUser = uni.getStorageSync('currentUser');
+			this.currentUser = uni.getStorageSync('userInfo');
 			//从服务器获取最新的好友信息
-			this.friend = restApi.findUserById(friendId);
-
+			//this.friend = restApi.findUserById(friendId);
+            this.$http.get('/user/get',{user_id:friendId}).then(res=>{
+				this.friend=res.data
+				uni.setNavigationBarTitle({
+					title : this.friend.username
+				});
+				this.loadHistoryMessage(true);
+				console.log(this.currentUser,this.friend)
+			})
 			this.initialGoEasyListeners();
-			this.loadHistoryMessage(true);
+			//this.loadHistoryMessage(true);
 			// 录音监听器
 			this.initRecorderListeners();
 
@@ -232,8 +237,8 @@
 					console.log('PRIVATE_MESSAGE_RECEIVED:', message);
 					let senderId = message.senderId;
 					let receiverId = message.receiverId;
-					let friendId = this.currentUser.uuid === senderId?receiverId:senderId;
-					if (friendId === this.friend.uuid) {
+					let friendId = this.currentUser.id === senderId?receiverId:senderId;
+					if (friendId === this.friend.id) {
 						this.messages.push(message);
 						//聊天时，收到消息标记为已读
 						this.markPrivateMessageAsRead();
@@ -246,8 +251,8 @@
 					deletedMessages.forEach(message => {
 						let senderId = message.senderId;
 						let receiverId = message.receiverId;
-						let friendId = this.currentUser.uuid === senderId?receiverId:senderId;
-						if (friendId === this.friend.uuid) {
+						let friendId = this.currentUser.id === senderId?receiverId:senderId;
+						if (friendId === this.friend.id) {
 							let index = this.messages.indexOf(message);
 							if (index > -1) {
 								this.messages.splice(index, 1);
@@ -278,10 +283,10 @@
 					res.duration = duration;
 					let audioMessage = this.goEasy.im.createAudioMessage({
 						to : {
-							id : this.friend.uuid,
+							id : this.friend.id,
 							type : this.GoEasy.IM_SCENE.PRIVATE,
 							data : {
-								name:this.friend.name,
+								name:this.friend.username,
 								avatar:this.friend.avatar
 							}
 						},
@@ -333,10 +338,10 @@
 					let textMessage = this.goEasy.im.createTextMessage({
 						text: this.content,
 						to : {
-							id : this.friend.uuid,
+							id : this.friend.id,
 							type : this.GoEasy.IM_SCENE.PRIVATE,
 							data : {
-								name:this.friend.name,
+								name:this.friend.username,
 								avatar:this.friend.avatar
 							}
 						},
@@ -352,7 +357,7 @@
 			showActionPopup(message) {
 				const MAX_RECALLABLE_TIME = 3 * 60 * 1000; //3分钟以内的消息才可以撤回
 				this.messageSelector.messages = [message];
-				if ((Date.now() - message.timestamp) < MAX_RECALLABLE_TIME && message.senderId === this.currentUser.uuid && message.status === 'success') {
+				if ((Date.now() - message.timestamp) < MAX_RECALLABLE_TIME && message.senderId === this.currentUser.id && message.status === 'success') {
 					this.actionPopup.recallable = true;
 				} else {
 					this.actionPopup.recallable = false;
@@ -440,7 +445,7 @@
 					lastMessageTimeStamp = lastMessage.timestamp;
 				}
 				this.goEasy.im.history({
-					userId: this.friend.uuid,
+					userId: this.friend.id,
 					lastTimestamp: lastMessageTimeStamp,
 					limit: 10,
 					onSuccess: (result) => {
@@ -502,10 +507,10 @@
 					success : (res) => {
 						let videoMessage = this.goEasy.im.createVideoMessage({
 							to : {
-								id : this.friend.uuid,
+								id : this.friend.id,
 								type : this.GoEasy.IM_SCENE.PRIVATE,
 								data : {
-									name:this.friend.name,
+									name:this.friend.username,
 									avatar:this.friend.avatar
 								}
 							},
@@ -514,7 +519,7 @@
 								console.log(progress)
 							},
 							notification : {
-								title : this.currentUser.name + '发来一个视频',
+								title : this.currentUser.username + '发来一个视频',
 								body : '[视频消息]'		// 字段最长 50 字符
 							}
 						});
@@ -529,10 +534,10 @@
 						res.tempFiles.forEach(file => {
 							let imageMessage = this.goEasy.im.createImageMessage({
 								to : {
-									id : this.friend.uuid,
+									id : this.friend.id,
 									type : this.GoEasy.IM_SCENE.PRIVATE,
 									data : {
-										name:this.friend.name,
+										name:this.friend.username,
 										avatar:this.friend.avatar
 									}
 								},
@@ -597,10 +602,10 @@
 						price : data.price
 					},
 					to : {
-						id : this.friend.uuid,
+						id : this.friend.id,
 						type : this.GoEasy.IM_SCENE.PRIVATE,
 						data : {
-							name : this.friend.name,
+							name : this.friend.username,
 							avatar: this.friend.avatar
 						}
 					},
@@ -628,7 +633,7 @@
 			},
 			markPrivateMessageAsRead () {
 				this.goEasy.im.markPrivateMessageAsRead({
-					userId: this.friend.uuid,
+					userId: this.friend.id,
 					onSuccess: function () {
 						console.log('标记私聊已读成功');
 					},
