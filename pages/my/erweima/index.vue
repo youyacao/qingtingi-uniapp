@@ -77,6 +77,7 @@
 		<button type="default" class="ewmbtn" @click="save">保存到相册</button>
 		<!-- <button type="default" @click="clear">清除</button>
 		<button type="default" @click="test">生成多个二维码演示</button> -->
+		<w-loading text="加载中.." mask="true" click="true" ref="loading"></w-loading>
 	</view>
 </template>
 

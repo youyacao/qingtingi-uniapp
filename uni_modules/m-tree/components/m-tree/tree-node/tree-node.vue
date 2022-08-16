@@ -43,7 +43,7 @@
 		<uni-popup ref="popup" background-color="#fff"  >
 			<view class="popup-content"  :class="{ 'popup-height': type === 'left' || type === 'right' }">
 				<div style="margin-top: 20px;margin-left: 20px;">好友列表</div>
-				<view class="userList" style="width: 350px; height:500px;padding: 20px; border-radius: 10px;overflow-y: auto; ">
+				<view class="userList" style="width: 320px; height:400px;padding: 20px; border-radius: 20px;overflow-y: auto; ">
 					<view class="userItem" style="border: 1px solid #f5f5f5;margin: 10px 0;" v-for="(friend,fid) in friends" :key="fid" >
 						<view class="left">
 							<image class="img" :src="friend.avatar"></image>
@@ -254,7 +254,7 @@
 		.userItem{
 			display: flex;
 			justify-content: space-between;
-			padding: 0 10px;
+			padding: 5px 15px;
 			height: 40px;
 			line-height: 40px;
 			background-color: #fff;

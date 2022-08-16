@@ -4,7 +4,7 @@
 			"path": "pages/message/index",
 			"style" : {
 			    "navigationBarTitleText" : "消息",
-				"enablePullDownRefresh" : true,
+				"enablePullDownRefresh" : false,
 			    "app-plus" : {
 			        "bounce" : "none",
 			        "titleNView" : {
@@ -38,7 +38,7 @@
 		    "path" : "pages/newFriend/index",
 		    "style" : {
 		        "navigationBarTitleText" : "新的朋友",
-		    	"enablePullDownRefresh" : true,
+		    	"enablePullDownRefresh" : false,
 		        "app-plus" : {
 		            "bounce" : "none",
 		            "titleNView" : {
@@ -61,7 +61,7 @@
 		    "path" : "pages/myts/index",
 		    "style" : {
 		        "navigationBarTitleText" : "我的同事",
-		    	"enablePullDownRefresh" : true,
+		    	"enablePullDownRefresh" : false,
 		        "app-plus" : {
 		            "bounce" : "none",
 		            "titleNView" : {
@@ -104,8 +104,8 @@
 			"style": {
 				"navigationBarTitleText": "新建标签",
 				"navigationBarBackgroundColor" : "#F3F4F7",
-				"navigationBarTextStyle" : "black",
-				"enablePullDownRefresh" : true
+				"navigationBarTextStyle" : "black"
+				
 				
 			}
 		},
@@ -114,8 +114,8 @@
 			"style": {
 				"navigationBarTitleText": "设置标签",
 				"navigationBarBackgroundColor" : "#F3F4F7",
-				"navigationBarTextStyle" : "black",
-				"enablePullDownRefresh" : true
+				"navigationBarTextStyle" : "black"
+				
 				
 			}
 		},
@@ -157,7 +157,7 @@
 		    "path" : "pages/my/index",
 		    "style" : {
 		        "navigationBarTitleText" : "我",
-		    	"enablePullDownRefresh" : true,
+		    	
 		        "app-plus" : {
 		            "bounce" : "none",
 		            "titleNView" : {
@@ -204,16 +204,16 @@
 			"path": "pages/chat/privateChat/privateChat",
 			"style": {
 				"navigationBarTitleText": "uni-app",
-				"navigationBarBackgroundColor" : "#F3F4F7",
-				"enablePullDownRefresh": true
+				"navigationBarBackgroundColor" : "#F3F4F7"
+			
 			}			
 		},
 		{
 			"path": "pages/chat/groupChat/groupChat",
 			"style": {
 				"navigationBarTitleText": "群",
-				"navigationBarBackgroundColor" : "#F3F4F7",
-				"enablePullDownRefresh": true
+				"navigationBarBackgroundColor" : "#F3F4F7"
+				
 			}			
 		},
 		{
@@ -262,7 +262,7 @@
 		    "path" : "pages/my/pengyouquan/index",
 		    "style" : {
 		        "navigationBarTitleText" : "朋友圈",
-		    	"enablePullDownRefresh" : true,
+		    	
 		        "app-plus" : {
 		            "bounce" : "none",
 		            "titleNView" : {
@@ -283,24 +283,24 @@
 			"path": "pages/my/pengyouquan/publish",
 			"style": {
 				"navigationBarTitleText": "发布",
-				"navigationBarBackgroundColor" : "#F3F4F7",
-				"enablePullDownRefresh": true
+				"navigationBarBackgroundColor" : "#F3F4F7"
+				
 			}			
 		},
 		{
 			"path": "pages/my/gongzhonghao/index",
 			"style": {
 				"navigationBarTitleText": "公众号",
-				"navigationBarBackgroundColor" : "#F3F4F7",
-				"enablePullDownRefresh": true
+				"navigationBarBackgroundColor" : "#F3F4F7"
+				
 			}			
 		},
 		{
 			"path": "pages/my/shipinquan/index",
 			"style": {
 				"navigationBarTitleText": "视频圈",
-				"navigationBarBackgroundColor" : "#F3F4F7",
-				"enablePullDownRefresh": true
+				"navigationBarBackgroundColor" : "#F3F4F7"
+				
 			}			
 		},
 		{
@@ -335,32 +335,32 @@
 			"path": "pages/my/kejian/index",
 			"style": {
 				"navigationBarTitleText": "课件",
-				"navigationBarBackgroundColor" : "#F3F4F7",
-				"enablePullDownRefresh": true
+				"navigationBarBackgroundColor" : "#F3F4F7"
+				
 			}			
 		},
 		{
 			"path": "pages/my/set/index",
 			"style": {
 				"navigationBarTitleText": "设置",
-				"navigationBarBackgroundColor" : "#F3F4F7",
-				"enablePullDownRefresh": true
+				"navigationBarBackgroundColor" : "#F3F4F7"
+				
 			}			
 		},
 		{
 			"path": "pages/my/info/index",
 			"style": {
 				"navigationBarTitleText": "基本信息",
-				"navigationBarBackgroundColor" : "#F3F4F7",
-				"enablePullDownRefresh": true
+				"navigationBarBackgroundColor" : "#F3F4F7"
+				
 			}			
 		},
 		{
 			"path": "pages/my/erweima/index",
 			"style": {
 				"navigationBarTitleText": "二维码",
-				"navigationBarBackgroundColor" : "#F3F4F7",
-				"enablePullDownRefresh": true
+				"navigationBarBackgroundColor" : "#F3F4F7"
+				
 			}			
 		}
 		

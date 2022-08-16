@@ -78,6 +78,7 @@
 						
 					</view>
 				</uni-popup>
+				<w-loading text="加载中.." mask="true" click="true" ref="loading"></w-loading>
 	</view>
     
 </template>
@@ -111,7 +112,8 @@
 					conversation : null,
 					visible : false
 				},
-				currentUser: null
+				currentUser: null,
+				
 			}
 		},
 		//导航栏图标点击
@@ -120,7 +122,7 @@
 				this.popValue=true
 			}
 		  },
-		onShow () {
+		onReady() {
 			 
 			let currentUser = uni.getStorageSync('userInfo');
 			if(!currentUser){
@@ -202,11 +204,13 @@
 				
 			},
 			create(){
+				this.$refs.loading.open()
 				this.$http.get('/user/saveGroup',{ name:this.groupName,intro:this.groupDesc,group_avatar:this.avater}).then(res=>{
 					this.$refs.popup.close()
 					this.avater=''
 					this.groupName=''
 					this.groupDesc=''
+					this.$refs.loading.close()
 				})
 				
 			},
@@ -222,8 +226,8 @@
 			},
 			
 			connectGoEasy() {
+				this.$refs.loading.open()
 				
-				uni.showLoading();
 				this.goEasy.connect({
 					id: this.currentUser.id,
 					data: {
@@ -248,10 +252,10 @@
 					onSuccess: (result) => {
 						let content = result.content;
 						this.renderConversations(content);
-						uni.hideLoading();
+						this.$refs.loading.close()
 					},
 					onFailed: (error) => {
-						uni.hideLoading();
+						this.$refs.loading.close()
 						console.log('获取最新会话列表失败, error:',error);
 					}
 				});
@@ -279,10 +283,7 @@
 				
 			},
 			topConversation() {  //会话置顶
-				uni.showLoading({
-					title:'加载中...',
-					mask: true
-				});
+				this.$refs.loading.open()
 				let actionPopup = this.actionPopup;
 				actionPopup.visible = false;
 
@@ -294,10 +295,10 @@
 						userId: conversation.userId,
 						top: !conversation.top,
 						onSuccess: function () {
-							uni.hideLoading();
+							this.$refs.loading.close()
 						},
 						onFailed: function (error) {
-							uni.hideLoading();
+							this.$refs.loading.close()
 							uni.showToast({
 								title: failedDescription,
 								icon: 'none'
@@ -310,10 +311,10 @@
 						groupId: conversation.groupId,
 						top: !conversation.top,
 						onSuccess: function () {
-							uni.hideLoading();
+							this.$refs.loading.close()
 						},
 						onFailed: function (error) {
-							uni.hideLoading();
+							this.$refs.loading.close()
 							uni.showToast({
 								title: failedDescription,
 								icon: 'none'
@@ -324,10 +325,7 @@
 				}
 			},
 			deleteConversation() {
-				uni.showLoading({
-					title:'加载中...',
-					mask: true
-				});
+				this.$refs.loading.open()
 				let failedDescription = '删除失败';
 				let conversation = this.actionPopup.conversation;
 				this.actionPopup.visible = false;
@@ -336,10 +334,10 @@
 					this.goEasy.im.removePrivateConversation({
 						userId: conversation.userId,
 						onSuccess: function () {
-							uni.hideLoading();
+							this.$refs.loading.close()
 						},
 						onFailed: function (error) {
-							uni.hideLoading();
+							this.$refs.loading.close()
 							uni.showToast({
 								title: failedDescription,
 								icon: 'none'
@@ -351,10 +349,10 @@
 					this.goEasy.im.removeGroupConversation({
 						groupId: conversation.groupId,
 						onSuccess: function () {
-							uni.hideLoading()
+							this.$refs.loading.close()
 						},
 						onFailed: function (error) {
-							uni.hideLoading();
+							this.$refs.loading.close()
 							uni.showToast({
 								title: failedDescription,
 								icon: 'none'

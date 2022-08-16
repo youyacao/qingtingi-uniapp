@@ -24,7 +24,8 @@ export function createApp() {
   }
 }
 // #endif
-
+import wLoading from "@/components//w-loading/w-loading.vue";
+Vue.component('w-loading',wLoading)
 const goEasy = GoEasy.getInstance({
 	host:'hangzhou.goeasy.io',//应用所在的区域地址: 【hangzhou.goeasy.io |singapore.goeasy.io】
 	appkey:'BC-08885949b4f54edfaa9ee4a7a786c51a',	// common key,

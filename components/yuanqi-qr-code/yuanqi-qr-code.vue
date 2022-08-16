@@ -4,6 +4,7 @@
 			:style="{width:canvasSize+'px',height:canvasSize+'px'}">
 		</image>
 		 <canvas :id="canvasId" :canvas-id="canvasId" class="yuanqi-canvas":style="{width:canvasSize+'px',height:canvasSize+'px'}" />
+		 <w-loading text="加载中.." mask="true" click="true" ref="loading"></w-loading>
 	</view>
 </template>
 

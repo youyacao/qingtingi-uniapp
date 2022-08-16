@@ -55,16 +55,16 @@
 			</navigator> -->
 			
 			
-			<navigator url="/pages/shebei/index"  hover-class="other-navigator-hover">
+			<!-- <navigator url="/pages/shebei/index"  hover-class="other-navigator-hover">
 			<view class="center-list-item border-bottom">
-				<!-- <text class="list-icon">&#xe639;</text> -->
+			
 				<text class="list-text">我的设备</text>
 				<text class="navigat-arrow">&#xe65e;</text>
 			</view>
-			</navigator>
+			</navigator> -->
 			<navigator url="/pages/my/erweima/index"  hover-class="other-navigator-hover">
 			<view class="center-list-item border-bottom">
-				<!-- <text class="list-icon">&#xe639;</text> -->
+				
 				<text class="list-text">我的二维码</text>
 				<text class="navigat-arrow">&#xe65e;</text>
 			</view>
@@ -89,6 +89,7 @@
 			</view>
 			</navigator>
 		</view>
+		<w-loading text="加载中.." mask="true" click="true" ref="loading"></w-loading>
 	</view>
 </template>
 
@@ -101,8 +102,9 @@
 				userInfo: null
 			}
 		},
-		onShow() {
+		onReady() {
 			   // this.userInfo =uni.getStorageSync('token')?uni.getStorageSync('token'):null
+			   this.$refs.loading.open()
 				 this.$http.post('/user',{}).then(re=>{
 					 if(re.code==200){
 						 this.login=true
@@ -110,6 +112,7 @@
 					 }else{
 						this.login=false 
 					 }
+					 this.$refs.loading.close()
 				 })
 				
 				

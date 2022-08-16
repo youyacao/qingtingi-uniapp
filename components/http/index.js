@@ -2,9 +2,9 @@ import http from './interface'
 export const $http = (url, method, data, json) => {
 	//设置请求前拦截器
 	http.interceptor.request = (config) => {
-		uni.showLoading({
+		/* uni.showLoading({
 			title:'加载中...'
-		})
+		}) */
 		config.header = {
 			'content-type': json ? 'application/json' : 'application/x-www-form-urlencoded',
 			"Authorization": uni.getStorageSync('token')
@@ -13,7 +13,7 @@ export const $http = (url, method, data, json) => {
 	//设置请求结束后拦截器
 	http.interceptor.response = async (response) => {
 		//判断返回状态 执行相应操作
-		uni.hideLoading()
+		//uni.hideLoading()
 		/* if (response.data.code == 200) {
 		  if (response.headers.authorization !== undefined && response.headers.authorization !== '') {
 		      uni.setStorageSync('token',response.headers.authorization)

@@ -34,7 +34,7 @@
             :title="inputtitle"
             @cancel="cancel"
             @confirm="inputconfirm">
-            <input v-model="inputcontent" style="margin:20upx" placeholder="请输入..." />
+            <input v-model="inputcontent" style="margin:30upx 20upx;line-height: 50upx;height: 50upx;padding-bottom: 20upx;  " placeholder="请输入名称" />
         </neil-modal>
 	</view>
 </template>

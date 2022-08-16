@@ -79,6 +79,7 @@
 					
 				</view>
 			</uni-popup>
+			<w-loading text="加载中.." mask="true" click="true" ref="loading"></w-loading>
 	</div>
 
 </template>
@@ -122,7 +123,7 @@ export default {
 			tagList:[]
 		};
 	},
-	onShow() {
+	onReady() {
 		this.userInfo =uni.getStorageSync('userInfo')
 		console.log('wo',this.userInfo)
 		let currentUser = uni.getStorageSync('currentUser');
@@ -203,12 +204,14 @@ export default {
 		},
 		
 		editGroup(){
+			
 			this.$http.get('/user/saveGroup',{ name:this.groupName,intro:this.groupDesc,group_avatar:this.avater,id:this.groupId}).then(res=>{
 				this.$refs.popupac.close()
 				this.avater=''
 				this.groupName=''
 				this.groupDesc=''
 				this.getGroupList()
+				
 			})
 		},
 		addTag(e){
@@ -217,9 +220,12 @@ export default {
 			})
 		},
 		getGroupList(){
+			
 			this.$http.post('/groupList',{page:1, limit:10000,user_id:this.userInfo.id}).then(res=>{
 				this.groups=res.data.list
+			
 			})
+			
 		},
 		getTagList(){
 			this.$http.get('/user/groupTagsList',{ page:1,limit:1000,type:'',keyword:''}).then(res=>{
@@ -270,8 +276,10 @@ export default {
 			this.$refs.popupTag.open('success')
 		},
 		getfriendList(){
+			this.$refs.loading.open()
 			this.$http.post('/user/relateList',{page:this.page, limit:this.limit}).then(res=>{
 				this.friends=res.data.list
+				this.$refs.loading.close()
 			})
 		},
 		

@@ -42,7 +42,9 @@ export default {
 		return {
 			phone: [],
 			xzList: [],
-			list:[]
+			list:[],
+			userInfo:null,
+			appName:'【蜻蜓I即时通讯】'
 		};
 	},
 	onLoad() {
@@ -78,6 +80,13 @@ export default {
 		        })
 		    });
 		
+	},
+	onShow() {
+		this.userInfo =uni.getStorageSync('userInfo')
+		this.$http.get('/config?key=im').then(res=>{
+			this.appName=res.data.im_app_name
+			console.log(this.userInfo.username,this.appName)
+		})
 	},
 	methods: {
 		have(e) {
@@ -115,7 +124,7 @@ export default {
 			var msg = plus.messaging.createMessage(plus.messaging.TYPE_SMS);
 			msg.to = arrTel; //收件人集合
 			msg.bodyType = 'text';
-			msg.body = '';
+			msg.body = '你的通讯录好友'+this.userInfo.username+'也在使用 '+this.appName+'APP,快来看看吧！';
 			plus.messaging.sendMessage(msg, function() {
 				that.api.msg('发送成功');
 			});

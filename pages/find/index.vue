@@ -30,7 +30,7 @@
 				
 			</div>
 		</view>	
-		
+		<w-loading text="加载中.." mask="true" click="true" ref="loading"></w-loading>
 	</view>
 </template>
 
@@ -47,7 +47,7 @@ export default {
 			userInfo:null
 		};
 	},
-	onShow() {
+	onReady() {
 		this.userInfo =uni.getStorageSync('userInfo')
 		this.getGroupList()
 	},
@@ -58,8 +58,10 @@ export default {
 			})
 		},
 		getGroupList(){
+			this.$refs.loading.open()
 			this.$http.post('/groupList',{page:1, limit:10000}).then(res=>{
 				this.groups=res.data.list
+				this.$refs.loading.close()
 			})
 		},
 		goPyq(){
