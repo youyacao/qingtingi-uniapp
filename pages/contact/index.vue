@@ -1,6 +1,6 @@
 <template>
 	<div class="contacts">
-		<search-box :searchPlaceholder="searchPlaceholder" @search="goSearch"></search-box>
+		<search-box :searchPlaceholder="searchPlaceholder" @search="goSearch" @keyword="filters"></search-box>
 		<!-- 页面调用 -->
 		<ju-navigator-grid element-id="navigatorMenu" :list="menu" @press="onPress" height="180" size="90" />
 		<div class="contacts-container">
@@ -13,9 +13,9 @@
 					</div>
 				</div>
 			</div>
-			<view class="contacts-title" v-if="friends && friends.length !== 0">联系人</view>
+			<view class="contacts-title" v-if="friendsFil && friendsFil.length !== 0">联系人</view>
 			<div class="user-list">
-				<div class="user-list-item" v-for="(friend, id) in friends" :key="id" @click="enterChat(friend.to_user_id, 'private')" @longpress="longpress(friend)">
+				<div class="user-list-item" v-for="(friend, id) in friendsFil" :key="id" @click="enterChat(friend.to_user_id, 'private')" @longpress="longpress(friend)">
 					<div class="user-item-avatar"><image :src="friend.avatar"></image></div>
 					<div class="user-item-info">
 						<span class="user-item-info__name">{{ friend.username }}</span>
@@ -120,7 +120,8 @@ export default {
 			page:1,
 			limit:10,
 			friendsid:null,
-			tagList:[]
+			tagList:[],
+			keyword:''
 		};
 	},
 	onReady() {
@@ -132,7 +133,20 @@ export default {
 		this.getTagList()
 		
 	},
+	
+	computed: {
+		 friendsFil() {
+		let da=	this.friends.filter(item=>{
+				return item.username.indexOf(this.keyword)>-1
+			})
+			return da
+			  
+		}
+	},
 	methods: {
+		filters(e){
+			this.keyword=e
+		},
 		longpressGroup(e){
 			this.groupName=e.name
 			this.avater =e.group_avatar

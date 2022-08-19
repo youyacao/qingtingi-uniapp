@@ -188,11 +188,11 @@
 			},
 			//执行搜索
 			doSearch(keyword) {
-				keyword = keyword===false?this.keyword:keyword;
-				this.keyword = keyword;
-				this.saveKeyword(keyword); //保存为历史 
+				let keywords = keyword===false?this.keyword:keyword.keyword;
+				
+				this.saveKeyword(keywords); //保存为历史 
 				uni.showToast({
-					title: keyword,
+					title: keywords,
 					icon: 'none',
 					duration: 2000
 				});
@@ -208,7 +208,7 @@
 			},
 			//保存关键字到历史记录
 			saveKeyword(keyword) {
-				uni.getStorage({
+				/* uni.getStorage({
 					key: 'OldKeys',
 					success: (res) => {
 						var OldKeys = JSON.parse(res.data);
@@ -235,7 +235,7 @@
 						});
 						this.oldKeywordList = OldKeys; //更新历史搜索
 					}
-				});
+				}); */
 				
 				this.$http.post('/searchAdd',{keyword:keyword}).then(res=>{
 					

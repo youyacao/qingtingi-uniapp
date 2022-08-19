@@ -1,9 +1,10 @@
 <template>
-	<view class="content" @click="search()">
+	<view class="content" >
 		<view class="search">
 			<view class="search-icon"></view>
 			<view class="search-placeholder">
-				{{ searchPlaceholder }}
+				
+				<input style="height: 100%; width: 100%;" @input="change" v-model="keyword" :placeholder="searchPlaceholder" type="text"  />
 			</view>
 		</view>
 	</view>
@@ -18,10 +19,20 @@
 				default:'请输入搜索内容...'
 			}
 		},
+		
+		data(){
+			return{
+				keyword:''
+			}
+		},
 		methods:{
 			search(){
 				this.$emit('search')
-			}
+			},
+			change(){
+				console.log(this.keyword)
+				this.$emit('keyword',this.keyword)
+			},
 		}
 		
 	}

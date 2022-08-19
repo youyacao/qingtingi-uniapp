@@ -1,9 +1,9 @@
 <template>
 	<view>
-		<search-box :searchPlaceholder="searchPlaceholder" @search="goSearch"></search-box>
+		<search-box :searchPlaceholder="searchPlaceholder" @search="goSearch" @keyword="filters"></search-box>
 		<scroll-view class="conversations" scroll-y="true" style="margin-bottom: 50px;">
-			<view v-if="conversations.length > 0">
-				<view class="scroll-item" v-for="(conversation, key) in conversations" :key="key">
+			<view v-if="conversationsFil.length > 0">
+				<view class="scroll-item" v-for="(conversation, key) in conversationsFil" :key="key">
 					<view class="item-head">
 						<image :src="conversation.data.avatar" class="head-icon"></image>
 						<view class="item-head_unread" v-if="conversation.unread">{{conversation.unread}}</view>
@@ -93,6 +93,7 @@
 		components:{SearchBox,chunLeiPopups},
 		data () {
 			return {
+				keyword:'',
 				avater:'',
 				groupDesc:'',
 				groupName:'',
@@ -122,6 +123,14 @@
 				this.popValue=true
 			}
 		  },
+	  computed: {
+	  	conversationsFil() {
+		   let data=	this.conversations.filter(item=>{
+				return item.data.name.indexOf(this.keyword)>-1 ||item.lastMessage.payload.text.indexOf(this.keyword)>-1
+			})
+	  		return data 
+	  	}
+	  },
 		onReady() {
 			 
 			let currentUser = uni.getStorageSync('userInfo');
@@ -141,6 +150,9 @@
 			this.loadConversations(); //加载会话列表
 		},
 		methods : {
+			filters(e){
+				this.keyword=e
+			},
 			imgUpload(file) {
 				console.log(file)
 				this.$http.post('/upload',{file:file}).then(res=>{
