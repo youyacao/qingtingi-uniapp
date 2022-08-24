@@ -111,6 +111,7 @@
 	import CustomMessage from '../../../components/CustomMessage/CustomMessage';
 	import EmojiDecoder from '../../../lib/EmojiDecoder';
 	import restApi from '../../../lib/restapi';
+	
 	const recorderManager = uni.getRecorderManager();
 	export default {
 		name: 'privateChat',
@@ -177,6 +178,13 @@
 			}
 		},
 		onReady () {
+			uni.authorize({
+				scope: 'scope.record',
+				success() {
+					console.log('cccc')
+					uni.getRecorderManager()
+				}
+			});
 			this.videoPlayer.context = uni.createVideoContext('videoPlayer',this);
 			// https://uniapp.dcloud.io/api/ui/navigationbar?id=setnavigationbartitle
 			
@@ -305,6 +313,7 @@
 				recorderManager.onError((res) =>{
 					this.audio.recording = false;
 					recorderManager.stop();
+					
 					uni.showToast({
 						icon: 'none',
 						title: '录音失败,请检查麦克风权限',
@@ -486,6 +495,8 @@
 				}
 			},
 			onRecordStart () {
+				
+				
 				try{
 					recorderManager.start();
 				}catch(e){

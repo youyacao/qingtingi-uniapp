@@ -8,7 +8,7 @@ import api from '@/components/http/index.js'
     // 全局挂载后使用
 Vue.prototype.$http = api
 Vue.prototype.$http.get('/config?key=im').then(res=>{
-	
+	console.log(res.data.im_secretkey)
 	const goEasy = GoEasy.getInstance({
 		host:'hangzhou.goeasy.io',//应用所在的区域地址: 【hangzhou.goeasy.io |singapore.goeasy.io】
 		appkey:res.data.im_secretkey,//'BC-08885949b4f54edfaa9ee4a7a786c51a',	// common key,
