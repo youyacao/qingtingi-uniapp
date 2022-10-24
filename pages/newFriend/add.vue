@@ -3,7 +3,7 @@
 		<view class="ui-all">
 			
 			<view class="ui-list">
-				<text>用户/群组</text>
+				<text>用户ID/群组</text>
 				<input type="text" :placeholder="value" v-model="keyword"  placeholder-class="place" />
 			</view>
 			
