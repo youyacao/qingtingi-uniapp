@@ -82,7 +82,7 @@
 				})
 			},
 			search(){
-				this.$http.post('/user/search').then(res=>{
+				this.$http.post('/user/search',{keyword:this.keyword,is_me:0}).then(res=>{
 					this.friends=res.data.list
 				})
 			}
