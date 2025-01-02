@@ -1,39 +1,62 @@
-# 蜻蜓I系统-优雅草蜻蜓IM系统-uni前端
 
-#### 介绍
-{**以下是 Gitee 平台说明，您可以替换此简介**
-Gitee 是 OSCHINA 推出的基于 Git 的代码托管平台（同时支持 SVN）。专为开发者提供稳定、高效、安全的云端软件开发协作平台
-无论是个人、团队、或是企业，都能够用 Gitee 实现代码托管、项目管理、协作开发。企业项目请看 [https://gitee.com/enterprises](https://gitee.com/enterprises)}
-
-#### 软件架构
-软件架构说明
+# 蜻蜓I即时通讯v1.0.4系统完全开源-2025年1月2日优雅草科技蜻蜓i即时通讯系统开源-本系统对接goeasy的IMsdk-对应后端系统蜻蜓Q系统旗舰版也已经开源-优雅草undefined
 
 
-#### 安装教程
+# 产品背景说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+蜻蜓I系统是采用蜻蜓Q旗舰版系统衍生开发的一个分支系统，此产品专注于即时通讯，因此仅有即时通讯聊天的功能无其他多余功能，2022年8月15日发布v1.0，将会不断升级打造一款简洁大气稳定的即时通讯聊天软件。 介绍 蜻蜓I系统包含朋友聊天，添加好友，删除好友，群聊，加入群聊，管理群聊等即时通讯功能，本产品为单一即时通讯而生并无其他功能，支持短信注册登录，蜻蜓I系统是2022年优雅草科技的商业产品-目前完整开源，本产品贡献最多成员为优雅草kirto，优雅草undefined两位兄弟。
 
-#### 使用说明
+# 更新日志
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+无
 
-#### 参与贡献
+# 截图
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+![](https://doc.youyacao.com/server/index.php?s=/api/attachment/visitFile&sign=25e7e44423b384b49caf29d92bd95481)
 
 
-#### 特技
+![](https://doc.youyacao.com/server/index.php?s=/api/attachment/visitFile&sign=94799d0ce9d88824d09d1353f7864a5d)
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+
+![](https://doc.youyacao.com/server/index.php?s=/api/attachment/visitFile&sign=d2d75c3009d76cd830bd3ee15e9959bd)
+
+![](https://doc.youyacao.com/server/index.php?s=/api/attachment/visitFile&sign=cca782ff3f31062a80c0f36e9c3021eb)
+
+![](https://doc.youyacao.com/server/index.php?s=/api/attachment/visitFile&sign=a8da481fc7df0fd28fd2739039cf27ed)
+
+![](https://doc.youyacao.com/server/index.php?s=/api/attachment/visitFile&sign=d3bc3278208a67932923b80437a0ecc6)
+
+![](https://doc.youyacao.com/server/index.php?s=/api/attachment/visitFile&sign=0951e9d2eae6e1850ebca8deedb31553)
+# 相关仓库地址
+
+## 前端客户端地址
+
+https://gitee.com/youyacao/qingtingi-uniapp
+
+## 服务端地址
+
+https://gitee.com/youyacao/st-qingting-api
+## 后台管理地址
+https://gitee.com/youyacao/st-qingting-admin
+
+
+# 本次更新前端相关文件
+
+无
+
+
+
+# 本次更新服务端相关文件
+无
+
+# 本次更新后台管理相关文件
+无
+
+
+# 本次数据库结构改动
+
+无
+
+# 互动交流QQ群
+
+QQ群929353806
